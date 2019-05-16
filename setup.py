@@ -19,7 +19,7 @@ setup(
     author_email="master@critizr.com",
     description="A Python library and command line interface for 1Password",
     long_description=readme(),
-    install_requires=["pexcept"],
+    install_requires=["pexpect"],
     license="MIT",
     url="https://github.com/critizr/criti-1pass",
     classifiers=[],
