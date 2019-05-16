@@ -1,4 +1,4 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from .one_path import OnePath
+from .one_password import OnePassword
