@@ -24,6 +24,4 @@ setup(
     url="https://github.com/critizr/criti-1pass",
     classifiers=[],
     packages=["onepassword"],
-    scripts=["bin/1pass"],
-    tests_require=[],
 )
