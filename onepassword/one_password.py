@@ -43,8 +43,8 @@ class OnePassword(object):
 
     # endregion
 
-    def unlock(self, sub_domain, op_session_name=u''):
-        cmd = u'op signin {domain} {login} {secret}'.format(domain=self.domain, login=self.login, secret=self.master_key)
+    def unlock(self, sub_domain, op_session_name):
+        cmd = u'op signin {domain} {login} {secret} --shorthand={session_name}'.format(domain=self.domain, login=self.login, secret=self.master_key, session_name=op_session_name)
         child = pexpect.spawn(cmd)
         child.logfile = sys.stdout
         child.expect([u'Enter the password'], timeout=None)
