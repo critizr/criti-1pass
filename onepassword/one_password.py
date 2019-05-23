@@ -103,7 +103,7 @@ class OnePassword(object):
 
         cmd = u"op create item Login {item} --vault={vault}".format(**params)
         if title:
-            cmd = u"{cmd} --title={title}".format(cmd=cmd, title=title)
+            cmd = u"{cmd} --title='{title}'".format(cmd=cmd, title=title)
         if url:
             cmd = u"{cmd} --url='{url}'".format(cmd=cmd, url=url)
         child = pexpect.spawn('/bin/bash', ['-c', cmd])
