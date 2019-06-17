@@ -109,3 +109,11 @@ class OnePassword(object):
         child = pexpect.spawn('/bin/bash', ['-c', cmd])
         response = child.readline().strip()
         return json.loads(response)
+
+    @is_unlock
+    def lock(self):
+        cmd = u'op signout'
+        child = pexpect.spawn(cmd)
+        child.readline()
+        self._locked = True
+
