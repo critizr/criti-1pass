@@ -8,7 +8,7 @@ import pexpect
 import json
 import string
 
-from one_exceptions import TokenException
+from onepassword.one_exceptions import TokenException
 from utils import is_unlock, gen_random_string
 
 
