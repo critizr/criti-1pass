@@ -9,7 +9,7 @@ import json
 import string
 
 from onepassword.one_exceptions import TokenException
-from utils import is_unlock, gen_random_string
+from onepassword.utils import is_unlock, gen_random_string
 
 
 class OnePassword(object):
