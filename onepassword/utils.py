@@ -15,4 +15,4 @@ def is_unlock(f):
 def gen_random_string(char_set, length):
     if not hasattr(gen_random_string, "rng"):
         gen_random_string.rng = random.SystemRandom()
-    return u''.join([gen_random_string.rng.choice(char_set) for _ in xrange(length)])
+    return u''.join([gen_random_string.rng.choice(char_set) for _ in range(length)])
