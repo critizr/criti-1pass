@@ -35,7 +35,7 @@ class OnePassword(object):
 
     @is_unlock
     def _encode_item(self, template):
-        j_data = template if isinstance(template, basestring) else json.dumps(template)
+        j_data = template if isinstance(template, str) else json.dumps(template)
         shell_cmd = str("echo '{}' | op encode".format(j_data))
         child = pexpect.spawn('/bin/sh', ['-c', shell_cmd], encoding='utf-8')
         response = child.readline().strip()
