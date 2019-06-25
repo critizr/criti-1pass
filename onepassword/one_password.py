@@ -30,47 +30,47 @@ class OnePassword(object):
     # region Private
     @is_unlock
     def _get_template(self, name):
-        response = json.loads(pexpect.spawn(str("op get template {name}".format(name=name))).readline())
+        response = json.loads(pexpect.spawn(str("op get template {name}".format(name=name)), encoding='utf-8').readline())
         return response
 
     @is_unlock
     def _encode_item(self, template):
         j_data = template if isinstance(template, basestring) else json.dumps(template)
         shell_cmd = str("echo '{}' | op encode".format(j_data))
-        child = pexpect.spawn('/bin/sh', ['-c', shell_cmd])
+        child = pexpect.spawn('/bin/sh', ['-c', shell_cmd], encoding='utf-8')
         response = child.readline().strip()
         return response
 
     # endregion
 
     def unlock(self, sub_domain, op_session_name):
-        cmd = str('op signin {domain} {login} {secret} --shorthand={session_name}'.format(domain=self.domain, login=self.login, secret=self.master_key, session_name=op_session_name))
-        child = pexpect.spawn(cmd)
+        cmd = 'op signin %s %s %s --shorthand=%s' % (self.domain, self.login, self.master_key, op_session_name)
+        child = pexpect.spawn(cmd, encoding='utf-8')
         child.logfile = sys.stdout
-        child.expect(['Enter the password'], timeout=None)
+        child.expect([u'Enter the password'], timeout=None)
         child.sendline(self.password)
         token = None
         lines = child.readlines()
-        op_session = str("OP_SESSION_{}".format(op_session_name))
-        regex = r"export {}=\"(.*)\"".format(op_session)
+        op_session = "OP_SESSION_%s" % op_session_name
+        regex = r"export %s=\"(.*)\"" % op_session
         for l in lines:
             matches = re.match(regex, str(l))
             if matches:
-                token = str(matches.groups()[0])
+                token = matches.groups()[0]
                 break
         if not token:
             self._locked = True
             raise TokenException("Cannot get token after entering password")
-        log_child = pexpect.spawn(str("op signin {}".format(sub_domain)))
-        os.environ[op_session] = token
-        log_child.expect(['Enter the password'], timeout=None)
+        log_child = pexpect.spawn("op signin {}".format(sub_domain), encoding='utf-8')
+        os.environ[str(op_session)] = str(token)
+        log_child.expect([u'Enter the password'], timeout=None)
         log_child.sendline(self.password)
-        self.vaults = json.loads(pexpect.spawn('op list vaults').readline())
+        self.vaults = json.loads(pexpect.spawn('op list vaults', encoding='utf-8').readline())
         self._locked = False
 
     @is_unlock
     def create_vault(self, name):
-        response = json.loads(pexpect.spawn(str("op create vault {name}".format(name=name))).readline())
+        response = json.loads(pexpect.spawn(str("op create vault {name}".format(name=name)), encoding='utf-8').readline())
         return response['uuid']
 
     @is_unlock
@@ -106,14 +106,14 @@ class OnePassword(object):
             cmd = str("{cmd} --title='{title}'".format(cmd=cmd, title=title))
         if url:
             cmd = str("{cmd} --url='{url}'".format(cmd=cmd, url=url))
-        child = pexpect.spawn('/bin/bash', ['-c', cmd])
+        child = pexpect.spawn('/bin/bash', ['-c', cmd], encoding='utf-8')
         response = child.readline().strip()
         return json.loads(response)
 
     @is_unlock
     def lock(self):
         cmd = 'op signout'
-        child = pexpect.spawn(cmd)
+        child = pexpect.spawn(cmd, encoding='utf-8')
         child.readline()
         self._locked = True
 
